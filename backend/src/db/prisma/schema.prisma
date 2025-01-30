@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FileDta {
+  id                  Int      @id @default(autoincrement())
+  docId               String    @unique
+  embeddingGenerated  Boolean  @default(false) 
+  createdAt           DateTime? @default(now())
+  fileMetaData        FileMetaData[]
+}
+
+model FileMetaData{
+  id          Int @id @default(autoincrement())
+  fileId      Int 
+  chunk       String
+  vectorId    String
+  page        Int?
+  fileDta     FileDta @relation(fields: [fileId], references: [id]) 
+}
